@@ -440,20 +440,23 @@
             opacity: 1;
         }
         
+        /* 优化后的星星和月亮位置 - 更靠近小人，便于精准摘取 */
         .star-object, .moon-object {
             position: absolute;
-            top: 30px;
-            right: 25px;
-            font-size: 40px;
+            top: 80px;  /* 从60px调整到80px，进一步降低高度，更容易触及 */
+            right: 35%; /* 从25px调整到35%，更靠近小人中心位置 */
+            left: auto;
+            font-size: 35px; /* 从40px调整到35px，稍微小一点更精准 */
             opacity: 1;
             z-index: 20;
             text-shadow: 0 0 20px rgba(255, 235, 59, 0.8);
-            animation: float 4s infinite ease-in-out;
+            animation: gentle-float 3s infinite ease-in-out; /* 使用更温和的浮动动画 */
             transition: all 0.3s ease;
         }
         
         .moon-object {
-            font-size: 50px;
+            font-size: 40px; /* 月亮保持稍大一些 */
+            right: 38%; /* 月亮稍微调整位置 */
         }
         
         /* 魔术问题场景的特殊样式 */
@@ -546,8 +549,14 @@
             }
             
             .star-object, .moon-object {
-                right: 20px;
+                right: 40%;
+                font-size: 30px;
+                top: 75px;  /* 手机端也相应调低 */
+            }
+            
+            .moon-object {
                 font-size: 35px;
+                right: 42%;
             }
             
             .magic-question h2 {
@@ -590,14 +599,26 @@
             .confession-content p {
                 font-size: 0.95rem;
             }
+            
+            .star-object, .moon-object {
+                right: 42%;
+                font-size: 28px;
+                top: 70px;  /* 小屏幕进一步调低 */
+            }
+            
+            .moon-object {
+                font-size: 32px;
+                right: 44%;
+            }
         }
         
-        @keyframes float {
+        /* 优化浮动动画 - 更温和，不会干扰摘取 */
+        @keyframes gentle-float {
             0%, 100% { 
                 transform: translateY(0) rotate(0deg); 
             }
             50% { 
-                transform: translateY(-15px) rotate(5deg); 
+                transform: translateY(-8px) rotate(2deg); 
             }
         }
         
@@ -632,55 +653,55 @@
             padding: 0 3px;
         }
         
-        /* 完美的摘星动画序列 */
-        @keyframes perfect-jump {
+        /* 优化的摘星动画序列 - 更精准的跳跃和触摸 */
+        @keyframes precise-jump {
             0% { 
                 transform: translateX(-50%) translateY(0); 
             }
             50% { 
-                transform: translateX(-50%) translateY(-120px); 
+                transform: translateX(-50%) translateY(-90px); /* 从-100px调整到-90px，配合调低的星星月亮位置 */
             }
             100% { 
                 transform: translateX(-50%) translateY(0); 
             }
         }
         
-        @keyframes reach-and-grab {
+        @keyframes precise-reach {
             0% { 
                 transform: translateX(-50%) rotate(-20deg); 
             }
             40% { 
-                transform: translateX(-50%) rotate(-140deg); 
+                transform: translateX(-50%) rotate(-120deg); /* 精准角度伸向星星/月亮位置 */
             }
             60% { 
-                transform: translateX(-50%) rotate(-140deg); 
+                transform: translateX(-50%) rotate(-120deg); 
             }
             100% { 
                 transform: translateX(-50%) rotate(20deg); 
             }
         }
         
-        @keyframes object-grabbed {
+        @keyframes object-collected {
             0% { 
                 top: 60px;
-                right: 80px;
+                right: 35%;
                 transform: scale(1);
                 opacity: 1;
             }
             30% { 
-                top: 35px;
-                right: 30px;
+                top: 40px;
+                right: 30%;
                 transform: scale(0.9);
                 opacity: 1;
             }
             60% { 
-                top: 20px;
-                right: 25px;
+                top: 25px;
+                right: 28%;
                 transform: scale(0.8);
                 opacity: 1;
             }
             100% { 
-                top: 15px;
+                top: 20px;
                 left: 50%;
                 right: auto;
                 transform: translateX(-50%) scale(0.8);
@@ -1053,19 +1074,19 @@
             if (sceneNumber === 2) {
                 createStars('sky1', 150);
                 setTimeout(() => {
-                    startPerfectPickingAnimation(1, 'star1', '⭐');
+                    startOptimizedPickingAnimation(1, 'star1', '⭐');
                 }, 800);
             } else if (sceneNumber === 4) {
                 createStars('sky2', 150);
                 setTimeout(() => {
-                    startPerfectPickingAnimation(2, 'moon1', '🌙');
+                    startOptimizedPickingAnimation(2, 'moon1', '🌙');
                 }, 800);
             }
         }
         
-        // 完美简洁的摘取动画函数
-        function startPerfectPickingAnimation(stickmanId, objectId, itemSymbol) {
-            console.log(`开始完美摘取动画: ${objectId}`);
+        // 优化的摘取动画函数 - 更精准的位置和动作
+        function startOptimizedPickingAnimation(stickmanId, objectId, itemSymbol) {
+            console.log(`开始优化摘取动画: ${objectId}`);
             
             const stickman = document.getElementById(`stickman${stickmanId}`);
             const object = document.getElementById(objectId);
@@ -1082,76 +1103,73 @@
             resetStickmanState(stickman);
             resetObjectState(object);
             
-            console.log('开始完美简洁动画序列...');
+            console.log('开始优化动画序列...');
             
-            // 动画序列 - 极简版本
+            // 优化的动画序列
             const animationSequence = async () => {
-                // 第1步：小人起跳并伸手触摸 (2.0秒)
-                console.log('步骤1: 小人起跳伸手触摸');
+                // 第1步：小人精准起跳并伸手触摸 (2.0秒)
+                console.log('步骤1: 小人精准起跳伸手');
                 
-                // 开始跳跃
-                stickman.style.animation = 'perfect-jump 2.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
+                // 开始跳跃 - 使用优化的跳跃动画
+                stickman.style.animation = 'precise-jump 2.0s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards';
                 
                 // 延迟400ms开始伸手，让动作更自然
                 setTimeout(() => {
                     rightArm.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
-                    rightArm.style.transform = 'translateX(-50%) rotate(-110deg)';  // 调整角度让手臂精准触及星星/月亮
+                    rightArm.style.transform = 'translateX(-50%) rotate(-105deg)';  // 精准角度触及优化后的星星/月亮位置
                 }, 400);
                 
                 // 等待1.2秒 - 手臂触摸到星星/月亮的瞬间
                 await delay(1200);
                 
-                // 第2步：星星/月亮被触摸，立即跟随小人
-                console.log('步骤2: 星星/月亮跟随小人');
+                // 第2步：星星/月亮被精准触摸，跟随小人
+                console.log('步骤2: 精准触摸，星星/月亮跟随');
                 
-                // 将星星/月亮移动到小人内部，让它跟随小人一起移动
+                // 将星星/月亮移动到小人内部
                 stickman.appendChild(object);
                 
-                // 立即定位到右手附近
+                // 精准定位到右手位置
                 object.style.position = 'absolute';
-                object.style.top = '25px';  // 在右手附近
-                object.style.left = '65%';  // 稍微偏右
+                object.style.top = '28px';  // 精准在右手附近
+                object.style.left = '62%';  // 右手位置
                 object.style.right = 'auto';
                 object.style.transform = 'scale(0.9)';
                 object.style.zIndex = '25';
                 object.style.animation = 'none';
-                object.style.transition = 'all 0.6s ease-out';
+                object.style.transition = 'all 0.5s ease-out';
                 
-                // 第3步：在落地过程中切换到双手抱姿势
-                await delay(400); // 等待小人开始落下
+                // 第3步：落地过程中切换到抱姿势
+                await delay(400);
                 
-                console.log('步骤3: 切换到双手抱姿势');
+                console.log('步骤3: 切换到抱姿势');
                 
-                // 同时进行：手臂调整 + 星星/月亮移动到怀中
-                // 右手臂回收
+                // 手臂调整为抱姿势
                 rightArm.style.transition = 'transform 0.4s ease-out';
-                rightArm.style.transform = 'translateX(-50%) rotate(-50deg) translateY(-5px)';
+                rightArm.style.transform = 'translateX(-50%) rotate(-45deg) translateY(-3px)';
                 
-                // 左手臂伸出抱姿势
                 leftArm.style.transition = 'transform 0.4s ease-out';
-                leftArm.style.transform = 'translateX(-50%) rotate(50deg) translateY(-5px)';
+                leftArm.style.transform = 'translateX(-50%) rotate(45deg) translateY(-3px)';
                 
                 // 头部轻微上抬
                 head.style.transition = 'transform 0.4s ease-out';
-                head.style.transform = 'translateX(-50%) translateY(-5px)';
+                head.style.transform = 'translateX(-50%) translateY(-3px)';
                 
-                // 星星/月亮移动到怀中央
-                object.style.top = '20px';
+                // 星星/月亮移动到怀中
+                object.style.top = '22px';
                 object.style.left = '50%';
                 object.style.transform = 'translateX(-50%) scale(0.8)';
                 
-                // 等待手臂调整完成
                 await delay(400);
                 
-                // 第4步：落地后庆祝
-                await delay(400); // 等待完全落地
+                // 第4步：落地庆祝
+                await delay(400);
                 
-                console.log('步骤4: 庆祝');
+                console.log('步骤4: 庆祝动画');
                 
-                // 添加轻微浮动效果
+                // 添加浮动效果
                 object.style.animation = 'object-in-hands 2s ease-in-out infinite';
                 
-                // 创建庆祝粒子效果
+                // 庆祝粒子效果
                 const containerRect = document.querySelector('.animation-container').getBoundingClientRect();
                 const stickmanRect = stickman.getBoundingClientRect();
                 const centerX = stickmanRect.left - containerRect.left + stickmanRect.width / 2;
@@ -1159,7 +1177,7 @@
                 
                 createParticles(centerX, centerY, 20);
                 
-                // 庆祝跳跃动画 - 小人和物体一起跳跃
+                // 庆祝跳跃
                 stickman.style.animation = 'holding-celebration 0.6s ease-in-out 2';
                 
                 // 记录收集的物品
@@ -1167,9 +1185,9 @@
                     collectedItems.push(itemSymbol);
                 }
                 
-                console.log(`${itemSymbol} 摘取完成！`);
+                console.log(`${itemSymbol} 精准摘取完成！`);
                 
-                // 等待庆祝完成后切换场景
+                // 切换到下一场景
                 await delay(1500);
                 
                 if (stickmanId === 1) {
@@ -1221,7 +1239,7 @@
             }
         }
         
-        // 重置物体状态
+        // 重置物体状态 - 使用优化后的初始位置
         function resetObjectState(object) {
             // 确保物体在正确的父容器中
             const animationContainer = object.closest('.animation-container');
@@ -1229,16 +1247,21 @@
                 animationContainer.appendChild(object);
             }
             
-            // 重置物体样式 - 调整到手臂可以精准触及的位置
+            // 重置为优化后的位置 - 更靠近小人，便于精准摘取
             object.style.position = 'absolute';
-            object.style.top = '30px';
-            object.style.right = '25px';
+            object.style.top = '80px';   // 从60px调整到80px，进一步降低
+            object.style.right = '35%';  // 优化后的水平位置
             object.style.left = 'auto';
             object.style.transform = 'scale(1)';
             object.style.opacity = '1';
             object.style.transition = 'none';
-            object.style.animation = 'float 4s infinite ease-in-out';
+            object.style.animation = 'gentle-float 3s infinite ease-in-out';  // 使用温和的浮动动画
             object.style.zIndex = '20';
+            
+            // 月亮的特殊位置调整
+            if (object.id === 'moon1') {
+                object.style.right = '38%';  // 月亮稍微调整
+            }
         }
         
         // 问题回答处理
@@ -1255,7 +1278,7 @@
             }
         }
         
-        // 新增：处理魔术问题的回答
+        // 处理魔术问题的回答
         function answerMagicQuestion(answer) {
             console.log(`回答魔术问题: ${answer ? '是' : '否'}`);
             
